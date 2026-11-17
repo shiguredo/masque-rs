@@ -1,0 +1,28 @@
+[package]
+name = "fuzz"
+version = "0.0.0"
+edition = "2024"
+rust-version = "1.95"
+publish = false
+
+[package.metadata]
+cargo-fuzz = true
+
+[[bin]]
+doc = false
+name = "fuzz_capsule"
+path = "fuzz_targets/fuzz_capsule.rs"
+
+[[bin]]
+doc = false
+name = "fuzz_varint"
+path = "fuzz_targets/fuzz_varint.rs"
+
+[dependencies]
+# fuzz ターゲットのランタイム
+libfuzzer-sys = "0.4"
+
+[dependencies.shiguredo_masque]
+path = ".."
+
+[workspace]

@@ -1,0 +1,68 @@
+# prek のフック。cargo fmt / clippy はコミット時、cargo test は push 時。
+#:schema https://www.schemastore.org/prek.json
+
+fail_fast = true
+default_stages = ["pre-commit"]
+default_install_hook_types = ["pre-commit", "pre-push"]
+exclude = { glob = ["target/**", "fuzz/target/**"] }
+
+[[repos]]
+repo = "builtin"
+hooks = [
+  # refs/ は IETF の一次資料なので、空白や改行や BOM を書き換えない
+  { id = "trailing-whitespace", exclude = { glob = "refs/**" } },
+  { id = "end-of-file-fixer", exclude = { glob = "refs/**" } },
+  { id = "fix-byte-order-marker", exclude = { glob = "refs/**" } },
+  { id = "check-toml" },
+  { id = "check-yaml" },
+  { id = "check-json" },
+  { id = "check-merge-conflict" },
+  { id = "check-case-conflict" },
+  { id = "check-illegal-windows-names" },
+  { id = "check-added-large-files" },
+  { id = "detect-private-key" },
+  { id = "mixed-line-ending", exclude = { glob = "refs/**" } },
+  { id = "check-symlinks" },
+  { id = "destroyed-symlinks" },
+  { id = "check-executables-have-shebangs" },
+  { id = "check-shebang-scripts-are-executable", exclude_types = ["rust"] },
+]
+
+[[repos]]
+repo = "https://github.com/tombi-toml/tombi-pre-commit"
+rev = "v1.11.2"
+hooks = [
+  { id = "tombi-lint", exclude = { glob = "**/Cargo.lock" } },
+  { id = "tombi-format", exclude = { glob = "**/Cargo.lock" } },
+]
+
+[[repos]]
+repo = "local"
+
+[[repos.hooks]]
+id = "cargo-fmt"
+name = "cargo fmt"
+entry = "cargo fmt --all -- --check"
+language = "system"
+types = ["rust"]
+pass_filenames = false
+priority = 0
+
+[[repos.hooks]]
+id = "cargo-clippy"
+name = "cargo clippy"
+entry = "cargo clippy --workspace --all-targets -- -D warnings"
+language = "system"
+types = ["rust"]
+pass_filenames = false
+priority = 10
+
+[[repos.hooks]]
+id = "cargo-test"
+name = "cargo test"
+entry = "cargo test --workspace"
+language = "system"
+types = ["rust"]
+pass_filenames = false
+stages = ["pre-push"]
+priority = 20

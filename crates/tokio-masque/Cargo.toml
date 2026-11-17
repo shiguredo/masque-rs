@@ -1,0 +1,25 @@
+[package]
+name = "tokio-masque"
+version = "2026.0.0"
+edition = "2024"
+rust-version = "1.95"
+description = "tobi-quic と http3-rs の上で MASQUE のバイト列を運ぶ"
+publish = false
+
+[dependencies]
+# 待受の自己署名証明書
+rcgen = { version = "0.14", default-features = false, features = ["aws_lc_rs"] }
+# TLS。tobi-quic と同じ aws-lc-rs プロバイダ
+rustls = { version = "0.23", default-features = false, features = ["aws-lc-rs", "std"] }
+# HTTP/3。データグラムの Quarter Stream ID もここを使う
+shiguredo_http3 = { path = "../../../http3-rs" }
+# Sans I/O の MASQUE
+shiguredo_masque = { path = "../.." }
+# QUIC。このクレート以外の masque-rs は tobi-quic に依存しない
+tobi_quic = { path = "../../../tobi/tobi-quic" }
+# 結線タスクとチャネル
+tokio = { version = "1.54", features = ["macros", "rt", "sync", "time"] }
+
+[dev-dependencies]
+# マルチスレッドのテストランタイム
+tokio = { version = "1.54", features = ["macros", "rt-multi-thread", "sync", "time"] }

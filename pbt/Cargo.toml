@@ -1,0 +1,12 @@
+[package]
+name = "pbt"
+version = "0.0.0"
+edition = "2024"
+rust-version = "1.95"
+publish = false
+
+[dependencies]
+# プロパティテスト (noprop 0.2)
+noprop = "0.2"
+# MASQUE 本体
+shiguredo_masque = { path = ".." }

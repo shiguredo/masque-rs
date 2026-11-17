@@ -1,0 +1,24 @@
+[package]
+name = "masque"
+version = "2026.0.0"
+edition = "2024"
+# 依存の tobi-quic と shiguredo_masque が MSRV 1.95 を要求するため、それに合わせる
+rust-version = "1.95"
+description = "CONNECT-IP を試すプロキシとクライアント"
+publish = false
+
+[dependencies]
+# utun のシステムコール
+libc = "0.2"
+# CLI 引数
+noargs = "0.4"
+# Sans I/O の CONNECT-IP
+shiguredo_masque = { path = "../.." }
+# 非同期ランタイム
+tokio = { version = "1.54", features = ["macros", "net", "rt-multi-thread", "sync", "time"] }
+# QUIC と HTTP/3 の結線。tobi-quic はこのクレートから直接使わない
+tokio-masque = { path = "../tokio-masque" }
+# ログ
+tracing = "0.1"
+# ログのフィルタと出力
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }

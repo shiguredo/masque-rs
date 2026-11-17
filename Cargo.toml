@@ -1,0 +1,21 @@
+[package]
+name = "shiguredo_masque"
+version = "2026.0.0"
+edition = "2024"
+rust-version = "1.95"
+description = "Sans-I/O no_std library for MASQUE (CONNECT-IP and CONNECT-UDP)"
+readme = "README.md"
+repository = "https://github.com/shiguredo/masque-rs"
+license = "Apache-2.0"
+include = ["/LICENSE", "/README.md", "/src/**"]
+
+[dependencies]
+
+[workspace]
+resolver = "3"
+members = ["crates/masque", "crates/tokio-masque", "pbt"]
+exclude = ["fuzz"]
+
+# noprop は panic = "unwind" を要求する。test は dev を引き継ぐ。
+[profile.dev]
+panic = "unwind"
